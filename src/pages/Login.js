@@ -39,9 +39,9 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function Login() {
+export default function Login({ setCurrentUser }) {
   return (
-    <RootStyle title="Login | Minimal-UI">
+    <RootStyle title="Login | Sage-Space">
       <AuthLayout>
         Don’t have an account? &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to="/register">
@@ -68,7 +68,7 @@ export default function Login() {
           </Stack>
           <AuthSocial />
 
-          <LoginForm />
+          <LoginForm setCurrentUser={setCurrentUser} />
 
           <MHidden width="smUp">
             <Typography variant="body2" align="center" sx={{ mt: 3 }}>

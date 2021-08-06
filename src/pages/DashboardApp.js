@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 // material
 import { Box, Grid, Container, Typography } from '@material-ui/core';
 // components
@@ -16,12 +17,22 @@ import {
   AppCurrentSubject,
   AppConversionRates
 } from '../components/_dashboard/app';
+import NoteModel from '../models/note';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
+  useEffect(() => {
+    console.log('Dashboard did mount');
+    NoteModel.getAllNotes()
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
-    <Page title="Dashboard | Minimal-UI">
+    <Page title="Dashboard | Sage-Space">
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
           <Typography variant="h4">Hi, Welcome back</Typography>
