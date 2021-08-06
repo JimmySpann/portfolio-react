@@ -24,7 +24,7 @@ const RootStyle = styled(AppBar)(({ theme }) => ({
   WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
   backgroundColor: alpha(theme.palette.background.default, 0.72),
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+    // width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
   }
 }));
 
@@ -46,11 +46,11 @@ export default function DashboardNavbar({ onOpenSidebar }) {
   return (
     <RootStyle>
       <ToolbarStyle>
-        <MHidden width="lgUp">
-          <IconButton onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
-            <Icon icon={menu2Fill} />
-          </IconButton>
-        </MHidden>
+        {/* <MHidden width="lgUp"> */}
+        <IconButton onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
+          <Icon icon={menu2Fill} />
+        </IconButton>
+        {/* </MHidden> */}
 
         <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
