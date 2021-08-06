@@ -27,11 +27,18 @@ const GREY = {
   500_56: alpha('#919EAB', 0.56),
   500_80: alpha('#919EAB', 0.8)
 };
-
+// const PRIMARY = {
+//   lighter: '#C8FACD',
+//   light: '#5BE584',
+//   main: '#00AB55',
+//   dark: '#007B55',
+//   darker: '#005249',
+//   contrastText: '#fff'
+// };
 const PRIMARY = {
   lighter: '#C8FACD',
   light: '#5BE584',
-  main: '#00AB55',
+  main: '#745DC6',
   dark: '#007B55',
   darker: '#005249',
   contrastText: '#fff'
