@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import { Form, FormikProvider, useFormik } from 'formik';
+import { makeStyles } from '@material-ui/styles';
+
 // material
 import {
   Box,
@@ -10,6 +12,7 @@ import {
   FormControlLabel,
   Stack
 } from '@material-ui/core';
+import Scrollbar from '../../Scrollbar';
 
 // ----------------------------------------------------------------------
 
@@ -22,6 +25,15 @@ const TASKS = [
 ];
 
 // ----------------------------------------------------------------------
+
+const useStyles = makeStyles({
+  card: {
+    height: 350
+  },
+  box: {
+    // overflowY: 'scroll'
+  }
+});
 
 TaskItem.propTypes = {
   task: PropTypes.string,
@@ -56,10 +68,11 @@ function TaskItem({ task, checked, formik, ...other }) {
   );
 }
 
-export default function AppTasks() {
+export default function AppTasks({ tasks, title }) {
+  const classes = useStyles();
   const formik = useFormik({
     initialValues: {
-      checked: [TASKS[2]]
+      checked: [tasks[2]]
     },
     onSubmit: (values) => {
       console.log(values);
@@ -69,21 +82,23 @@ export default function AppTasks() {
   const { values, handleSubmit } = formik;
 
   return (
-    <Card>
-      <CardHeader title="Tasks" />
-      <Box sx={{ px: 3, py: 1 }}>
-        <FormikProvider value={formik}>
-          <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-            {TASKS.map((task) => (
-              <TaskItem
-                key={task}
-                task={task}
-                formik={formik}
-                checked={values.checked.includes(task)}
-              />
-            ))}
-          </Form>
-        </FormikProvider>
+    <Card classes={{ root: classes.card }}>
+      <CardHeader title={title} />
+      <Box sx={{ px: 3, py: 1 }} className={classes.box}>
+        <Scrollbar sx={{ height: 280 }}>
+          <FormikProvider value={formik}>
+            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+              {tasks.map((task) => (
+                <TaskItem
+                  key={task}
+                  task={task}
+                  formik={formik}
+                  checked={values.checked.includes(task)}
+                />
+              ))}
+            </Form>
+          </FormikProvider>
+        </Scrollbar>
       </Box>
     </Card>
   );

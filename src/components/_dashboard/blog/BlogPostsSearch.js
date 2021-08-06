@@ -3,7 +3,8 @@ import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, TextField, Autocomplete, InputAdornment } from '@material-ui/core';
+import { Box, TextField, InputAdornment } from '@material-ui/core';
+import { Autocomplete } from '@material-ui/lab';
 
 // ----------------------------------------------------------------------
 
