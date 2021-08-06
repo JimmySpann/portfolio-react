@@ -5,6 +5,7 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import { Icon } from '@iconify/react';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
+import axios from 'axios';
 // material
 import {
   Link,
@@ -19,7 +20,7 @@ import { LoadingButton } from '@material-ui/lab';
 
 // ----------------------------------------------------------------------
 
-export default function LoginForm() {
+export default function LoginForm(props) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -35,8 +36,20 @@ export default function LoginForm() {
       remember: true
     },
     validationSchema: LoginSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: (values) => {
+      console.log({ values });
+      axios
+        .post(`${process.env.REACT_APP_API}/auth/login`, values)
+        .then((res) => {
+          console.log(res);
+          props.setCurrentUser(res.data.token);
+          navigate('/dashboard', { replace: true });
+          // this.props.history.push('/notes');
+        })
+        .catch((err) => {
+          // this.setState({errorMessage: err.response.data.message});
+          // debugLog(this.state.errorMessage);
+        });
     }
   });
 
@@ -104,3 +117,7 @@ export default function LoginForm() {
     </FormikProvider>
   );
 }
+
+// LoginForm.propTypes = {
+//   name: PropTypes.string
+// };
