@@ -1,0 +1,15 @@
+/* Customizations */
+.dialog-box {
+  padding-right: 25px;
+  padding-bottom: 25px;
+  padding-left: 25px;
+}
+
+.check-box {
+  padding-top: 20px;
+  width: 100px;
+}
+
+.grid-hide {
+  display: none;
+}
