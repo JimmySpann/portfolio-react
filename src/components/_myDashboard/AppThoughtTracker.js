@@ -19,10 +19,12 @@ import {
   autocompleteClasses
 } from '@material-ui/core';
 import TimePicker from '@material-ui/lab/TimePicker';
+import MobileTimePicker from '@material-ui/lab/MobileTimePicker';
 import Label from '../Label';
 import Scrollbar from '../Scrollbar';
 import USERLIST from '../../_mocks_/user';
 import { UserListHead } from '../_dashboard/user';
+
 // ----------------------------------------------------------------------
 const useStyles = makeStyles({
   timePicker: {
@@ -135,7 +137,7 @@ export default function AppThoughtTracker() {
                     >
                       <TableCell align="left">
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                          <TimePicker
+                          <MobileTimePicker
                             renderInput={(props) => (
                               <TextField classes={{ root: classes.timePicker }} {...props} />
                             )}

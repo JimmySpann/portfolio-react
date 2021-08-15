@@ -1,5 +1,5 @@
 // material
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -8,6 +8,7 @@ import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
 import { TextField, Select, MenuItem, Grid, Button } from '@material-ui/core';
 import TimePicker from '@material-ui/lab/TimePicker';
+import MobileTimePicker from '@material-ui/lab/MobileTimePicker';
 // ----------------------------------------------------------------------
 const useStyles = makeStyles({
   container: {
@@ -68,14 +69,14 @@ export default function AppDataDialog(props) {
     const { label, type, gridSize, fullwidth, special } = field;
     let element;
     if (type === 'textbox') {
-      console.log('label', label, dataState[0]);
+      console.log('label', label, dataState);
       element = (
         <TextField
           key={label}
           label={label}
           fullWidth={fullwidth}
           classes={{ root: classes.field }}
-          value={dataState[0][label]}
+          value={dataState[label]}
           onChange={handleFieldChange}
           inputProps={{ 'data-name': label }}
         />
@@ -83,12 +84,12 @@ export default function AppDataDialog(props) {
     } else if (type === 'timepicker') {
       element = (
         <LocalizationProvider key={label} dateAdapter={AdapterDateFns}>
-          <TimePicker
+          <MobileTimePicker
             renderInput={(props) => <TextField {...props} />}
             margin="normal"
             label={label}
             fullWidth={fullwidth}
-            value={dataState[0][label]}
+            value={dataState[label]}
             // onAccept={(date) => handleDateChange(date, label)}
             onChange={(date) => handleDateChange(date, label)}
             inputProps={{ 'data-name': label }}
@@ -102,7 +103,7 @@ export default function AppDataDialog(props) {
           label={label}
           fullWidth={fullwidth}
           disabled
-          value={dataState[0][label]}
+          value={dataState[label]}
           onChange={handleFieldChange}
           inputProps={{ 'data-name': label }}
         />
@@ -113,7 +114,7 @@ export default function AppDataDialog(props) {
           {special.map((item, id) => (
             <MenuItem
               key={id}
-              value={dataState[0][label]}
+              value={dataState[label]}
               onChange={handleFieldChange}
               inputprops={{ 'data-name': label }}
             >
@@ -137,13 +138,17 @@ export default function AppDataDialog(props) {
     );
   };
 
+  useEffect(() => {
+    setDataState(data);
+  }, [data]);
+
   // const addCat = () => {
   //   setCatState([...catState, { ...blankCat }]);
   // };
 
   const handleFieldChange = (e) => {
     const updatedData = [...dataState];
-    updatedData[0][e.target.dataset.name] = e.target.value;
+    updatedData[e.target.dataset.name] = e.target.value;
     setDataState(updatedData);
   };
 
@@ -159,8 +164,8 @@ export default function AppDataDialog(props) {
 
   const handleDateChange = (date, label) => {
     const updatedData = [...dataState];
-    updatedData[0][label] = date;
-    updatedData[0]['duration'] = timeDistance(updatedData[0]['end'], updatedData[0]['start']);
+    updatedData[label] = date;
+    updatedData['duration'] = timeDistance(updatedData['end'], updatedData['start']);
     setDataState(updatedData);
   };
 
