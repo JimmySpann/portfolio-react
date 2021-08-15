@@ -2,8 +2,14 @@ import PropTypes from 'prop-types';
 // material
 import { visuallyHidden } from '@material-ui/utils';
 import { Box, TableRow, TableCell, TableHead, TableSortLabel } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 
 // ----------------------------------------------------------------------
+const useStyles = makeStyles({
+  tableCell: {
+    padding: '8px'
+  }
+});
 
 UserListHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
@@ -28,6 +34,8 @@ export default function UserListHead({
     onRequestSort(event, property);
   };
 
+  const classes = useStyles();
+
   return (
     <TableHead>
       <TableRow>
@@ -43,6 +51,7 @@ export default function UserListHead({
             key={headCell.id}
             align={headCell.alignRight ? 'right' : 'left'}
             sortDirection={orderBy === headCell.id ? order : false}
+            classes={{ root: classes.tableCell }}
           >
             <TableSortLabel
               hideSortIcon
