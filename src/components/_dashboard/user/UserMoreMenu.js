@@ -26,6 +26,7 @@ export default function UserMoreMenu(props) {
         open={isOpen}
         anchorEl={ref.current}
         onClose={() => setIsOpen(false)}
+        onClick={() => setIsOpen(false)}
         PaperProps={{
           sx: { width: 200, maxWidth: '100%' }
         }}
