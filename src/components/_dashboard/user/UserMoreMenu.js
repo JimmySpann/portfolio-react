@@ -1,5 +1,6 @@
-import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import { Icon } from '@iconify/react';
 import editFill from '@iconify/icons-eva/edit-fill';
 import addFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
@@ -10,9 +11,10 @@ import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@materia
 
 // ----------------------------------------------------------------------
 
-export default function UserMoreMenu() {
+export default function UserMoreMenu(props) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const { id, data, handleItemClick } = props;
 
   return (
     <>
@@ -30,7 +32,7 @@ export default function UserMoreMenu() {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem component={RouterLink} to="#" sx={{ color: 'text.secondary' }}>
+        <MenuItem onClick={() => handleItemClick('add', id, data)} sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Icon icon={addFill} width={24} height={24} />
           </ListItemIcon>
@@ -54,3 +56,8 @@ export default function UserMoreMenu() {
     </>
   );
 }
+
+UserMoreMenu.propTypes = {
+  children: PropTypes.any,
+  handleItemClick: PropTypes.func
+};
