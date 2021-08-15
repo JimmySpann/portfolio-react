@@ -59,9 +59,16 @@ const dataTypes = {
 export default function AppDataDialog(props) {
   const classes = useStyles();
   const { title, data, onClose, open } = props;
-  const [dataState, setDataState] = useState(data);
+  const [dataState, setDataState] = useState({ ...data.data });
+  const { id } = data;
+
+  // Needed to use Dialog for multiple rows
+  useEffect(() => {
+    setDataState({ ...data.data });
+  }, [data]);
+
   const handleClose = () => {
-    onClose();
+    onClose(dataState, id);
   };
 
   const generateField = (idx, field, handleFieldChange) => {
@@ -137,16 +144,12 @@ export default function AppDataDialog(props) {
     );
   };
 
-  useEffect(() => {
-    setDataState(data);
-  }, [data]);
-
   // const addCat = () => {
   //   setCatState([...catState, { ...blankCat }]);
   // };
 
   const handleFieldChange = (e) => {
-    const updatedData = [...dataState];
+    const updatedData = { ...dataState };
     updatedData[e.target.dataset.name] = e.target.value;
     setDataState(updatedData);
   };
@@ -162,7 +165,7 @@ export default function AppDataDialog(props) {
   };
 
   const handleDateChange = (date, label) => {
-    const updatedData = [...dataState];
+    const updatedData = { ...dataState };
     updatedData[label] = date;
     updatedData['duration'] = timeDistance(updatedData['end'], updatedData['start']);
     setDataState(updatedData);

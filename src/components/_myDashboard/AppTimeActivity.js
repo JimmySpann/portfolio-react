@@ -52,13 +52,6 @@ export default function AppTimeActivity({ activities }) {
   const [activityList, setActivityList] = useState(activities);
   const [open, setOpen] = useState(false);
 
-  // const handleDialogOpen = () => {
-  //   setOpen(true);
-  // };
-  const handleDialogClose = () => {
-    setOpen(false);
-  };
-
   const handleFieldChange = (e, idx = '', cusLabel = '') => {
     const updatedData = [...activityList];
     let id;
@@ -96,7 +89,21 @@ export default function AppTimeActivity({ activities }) {
   const [dialogData, setDialogData] = useState(activityList[0]);
   const handleMenuClick = (type, id, data) => {
     setDialogTitle(type);
-    setDialogData(data);
+    const combinedData = {
+      id,
+      data
+    };
+    setDialogData(combinedData);
+  };
+
+  // const handleDialogOpen = () => {
+  //   setOpen(true);
+  // };
+  const handleDialogClose = (data, id) => {
+    const updatedData = [...activityList];
+    updatedData[id] = data;
+    setActivityList(updatedData);
+    setOpen(false);
   };
 
   useEffect(() => {
