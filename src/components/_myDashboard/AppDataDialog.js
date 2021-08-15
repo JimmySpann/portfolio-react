@@ -1,6 +1,7 @@
 // material
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
+import PropTypes from 'prop-types';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
@@ -58,25 +59,28 @@ const dataTypes = {
 export default function AppDataDialog(props) {
   const classes = useStyles();
   const { title, data, dataTypeSchema, onClose, open } = props;
-
+  const [dataState, setDataState] = useState(data);
   const handleClose = () => {
     onClose();
   };
 
-  const generateField = ({ label, type, gridSize, fullwidth, special }) => {
-    console.log('fullwidth', fullwidth);
+  const generateField = (idx, field, handleFieldChange) => {
+    const { label, type, gridSize, fullwidth, special } = field;
     let element;
     if (type === 'textbox') {
+      console.log('label', label, dataState[0]);
       element = (
         <TextField
           key={label}
           label={label}
           fullWidth={fullwidth}
           classes={{ root: classes.field }}
+          value={dataState[0][label]}
+          onChange={handleFieldChange}
+          inputProps={{ 'data-name': label }}
         />
       );
-    }
-    if (type === 'timepicker') {
+    } else if (type === 'timepicker') {
       element = (
         <LocalizationProvider key={label} dateAdapter={AdapterDateFns}>
           <TimePicker
@@ -84,20 +88,37 @@ export default function AppDataDialog(props) {
             margin="normal"
             label={label}
             fullWidth={fullwidth}
+            value={dataState[0][label]}
+            // onAccept={(date) => handleDateChange(date, label)}
+            onChange={(date) => handleDateChange(date, label)}
+            inputProps={{ 'data-name': label }}
           />
         </LocalizationProvider>
       );
-    }
-    if (type === 'label') {
+    } else if (type === 'label') {
       element = (
-        <TextField key={label} label={label} value="00:00:00" fullWidth={fullwidth} disabled />
+        <TextField
+          key={label}
+          label={label}
+          fullWidth={fullwidth}
+          disabled
+          value={dataState[0][label]}
+          onChange={handleFieldChange}
+          inputProps={{ 'data-name': label }}
+        />
       );
-    }
-    if (type === 'selectbox') {
+    } else if (type === 'selectbox') {
       element = (
         <Select fullWidth={fullwidth} value={special[2]}>
           {special.map((item, id) => (
-            <MenuItem key={id}>{item}</MenuItem>
+            <MenuItem
+              key={id}
+              value={dataState[0][label]}
+              onChange={handleFieldChange}
+              inputprops={{ 'data-name': label }}
+            >
+              {item}
+            </MenuItem>
           ))}
         </Select>
       );
@@ -116,11 +137,40 @@ export default function AppDataDialog(props) {
     );
   };
 
+  // const addCat = () => {
+  //   setCatState([...catState, { ...blankCat }]);
+  // };
+
+  const handleFieldChange = (e) => {
+    const updatedData = [...dataState];
+    updatedData[0][e.target.dataset.name] = e.target.value;
+    setDataState(updatedData);
+  };
+
+  const timeDistance = (date1, date2) => {
+    let distance = Math.abs(date1 - date2);
+    const hours = Math.floor(distance / 3600000);
+    distance -= hours * 3600000;
+    const minutes = Math.floor(distance / 60000);
+    distance -= minutes * 60000;
+    const seconds = Math.floor(distance / 1000);
+    return `${hours}:${`0${minutes}`.slice(-2)}:${`0${seconds}`.slice(-2)}`;
+  };
+
+  const handleDateChange = (date, label) => {
+    const updatedData = [...dataState];
+    updatedData[0][label] = date;
+    updatedData[0]['duration'] = timeDistance(updatedData[0]['end'], updatedData[0]['start']);
+    setDataState(updatedData);
+  };
+
   return (
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>{title}</DialogTitle>
       <Grid container spacing={3} classes={{ container: classes.container }}>
-        {dataTypes.TimeTrackerEdit.map((field) => generateField(field))}
+        {dataTypes.TimeTrackerEdit.map((field, idx) =>
+          generateField(idx, field, handleFieldChange)
+        )}
 
         <Grid item xs={12} md={12} lg={12} classes={{ root: classes.fieldContainer }}>
           <Button classes={{ root: classes.button }}>Cancel</Button>
