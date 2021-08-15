@@ -58,6 +58,7 @@ export default function UserMoreMenu(props) {
 }
 
 UserMoreMenu.propTypes = {
-  children: PropTypes.any,
-  handleItemClick: PropTypes.func
+  handleItemClick: PropTypes.func,
+  id: PropTypes.number,
+  data: PropTypes.any
 };

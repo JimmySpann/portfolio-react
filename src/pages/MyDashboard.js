@@ -1,22 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 // material
-import { Box, Grid, Container, Typography, Button } from '@material-ui/core';
+import { Box, Grid, Container, Typography } from '@material-ui/core';
 // components
 import Page from '../components/Page';
-import {
-  AppTasks,
-  AppNewUsers,
-  AppBugReports,
-  AppItemOrders,
-  AppNewsUpdate,
-  AppWeeklySales,
-  AppOrderTimeline,
-  AppCurrentVisits,
-  AppWebsiteVisits,
-  AppTrafficBySite,
-  AppCurrentSubject,
-  AppConversionRates
-} from '../components/_dashboard/app';
+import { AppTasks } from '../components/_dashboard/app';
 import AppTimeActivity from '../components/_myDashboard/AppTimeActivity';
 import AppThoughtTracker from '../components/_myDashboard/AppThoughtTracker';
 import NoteModel from '../models/note';

@@ -7,7 +7,6 @@ import Dialog from '@material-ui/core/Dialog';
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
 import { TextField, Select, MenuItem, Grid, Button } from '@material-ui/core';
-import TimePicker from '@material-ui/lab/TimePicker';
 import MobileTimePicker from '@material-ui/lab/MobileTimePicker';
 // ----------------------------------------------------------------------
 const useStyles = makeStyles({
@@ -59,7 +58,7 @@ const dataTypes = {
 
 export default function AppDataDialog(props) {
   const classes = useStyles();
-  const { title, data, dataTypeSchema, onClose, open } = props;
+  const { title, data, onClose, open } = props;
   const [dataState, setDataState] = useState(data);
   const handleClose = () => {
     onClose();
@@ -185,3 +184,11 @@ export default function AppDataDialog(props) {
     </Dialog>
   );
 }
+
+AppDataDialog.propTypes = {
+  children: PropTypes.any,
+  title: PropTypes.string,
+  data: PropTypes.any,
+  onClose: PropTypes.func,
+  open: PropTypes.bool
+};

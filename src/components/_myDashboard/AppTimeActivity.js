@@ -17,7 +17,6 @@ import {
   Select,
   MenuItem
 } from '@material-ui/core';
-import TimePicker from '@material-ui/lab/TimePicker';
 import MobileTimePicker from '@material-ui/lab/MobileTimePicker';
 import Scrollbar from '../Scrollbar';
 import UserMoreMenu from '../_dashboard/user/UserMoreMenu';
@@ -53,9 +52,9 @@ export default function AppTimeActivity({ activities }) {
   const [activityList, setActivityList] = useState(activities);
   const [open, setOpen] = useState(false);
 
-  const handleDialogOpen = () => {
-    setOpen(true);
-  };
+  // const handleDialogOpen = () => {
+  //   setOpen(true);
+  // };
   const handleDialogClose = () => {
     setOpen(false);
   };
