@@ -47,6 +47,81 @@ const HABITS = [
   'Read Mission'
 ];
 
+const TIME_ACTIVITIES = [
+  {
+    id: 1,
+    task: 'Cook dinner',
+    start: new Date('August 6, 2021 16:14:00'),
+    end: new Date('August 6, 2021 16:50:00'),
+    duration: '00:36:00',
+    quality: 'Good'
+  },
+  {
+    id: 2,
+    task: 'Eat cheese',
+    start: new Date('August 6, 2021 16:50:00'),
+    end: new Date('August 6, 2021 17:15:00'),
+    duration: '00:25:00',
+    quality: 'Meh'
+  },
+  {
+    id: 3,
+    task: 'Code',
+    start: new Date('August 6, 2021 17:15:00'),
+    end: new Date('August 6, 2021 18:15:00'),
+    duration: '01:00:00',
+    quality: 'Great'
+  },
+  {
+    id: 4,
+    task: 'Play Games',
+    start: new Date('August 6, 2021 17:15:00'),
+    end: new Date('August 6, 2021 19:15:00'),
+    duration: '01:00:00',
+    quality: 'Bad'
+  },
+  {
+    id: 5,
+    task: 'Flick boogers on by-passers',
+    start: new Date('August 6, 2021 19:15:00'),
+    end: new Date('August 6, 2021 20:00:00'),
+    duration: '00:45:00',
+    quality: 'Amazing!'
+  },
+  {
+    id: 6,
+    task: 'Nap',
+    start: new Date('August 6, 2021 20:00:00'),
+    end: new Date('August 6, 2021 20:15:00'),
+    duration: '00:15:00',
+    quality: 'Meh'
+  },
+  {
+    id: 7,
+    task: 'Smoke Crack',
+    start: new Date('August 6, 2021 20:15:00'),
+    end: new Date('August 6, 2021 20:30:00'),
+    duration: '00:15:00',
+    quality: 'Great'
+  },
+  {
+    id: 8,
+    task: 'Talk to Corporate',
+    start: new Date('August 6, 2021 20:30:00'),
+    end: new Date('August 6, 2021 20:50:00'),
+    duration: '00:20:00',
+    quality: 'Good'
+  },
+  {
+    id: 9,
+    task: 'Approve Memos',
+    start: new Date('August 6, 2021 20:50:00'),
+    end: new Date('August 6, 2021 21:10:00'),
+    duration: '00:20:00',
+    quality: 'Good'
+  }
+];
+
 export default function MyDashboardApp() {
   useEffect(() => {
     console.log('My Dashboard did mount');
@@ -86,7 +161,7 @@ export default function MyDashboardApp() {
           </Grid>
 
           <Grid item xs={12} md={7} lg={7}>
-            <AppTimeActivity />
+            <AppTimeActivity activities={TIME_ACTIVITIES} />
           </Grid>
 
           <Grid item xs={12} md={5} lg={5}>
@@ -94,7 +169,12 @@ export default function MyDashboardApp() {
           </Grid>
         </Grid>
       </Container>
-      <AppDataDialog open={open} title="Edit Time Activity" onClose={handleDialogClose} />
+      <AppDataDialog
+        open={open}
+        title="Edit Time Activity"
+        onClose={handleDialogClose}
+        data={TIME_ACTIVITIES}
+      />
     </Page>
   );
 }
