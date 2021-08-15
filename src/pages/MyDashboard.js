@@ -20,7 +20,6 @@ import {
 import AppTimeActivity from '../components/_myDashboard/AppTimeActivity';
 import AppThoughtTracker from '../components/_myDashboard/AppThoughtTracker';
 import NoteModel from '../models/note';
-import AppDataDialog from '../components/_myDashboard/AppDataDialog';
 
 // ----------------------------------------------------------------------
 
@@ -131,18 +130,9 @@ export default function MyDashboardApp() {
       })
       .catch((err) => console.log(err));
   }, []);
-  const [open, setOpen] = useState(false);
-
-  const handleDialogOpen = () => {
-    setOpen(true);
-  };
-  const handleDialogClose = () => {
-    setOpen(false);
-  };
 
   return (
     <Page title="Dashboard | Sage-Space">
-      <Button onClick={handleDialogOpen}>Click for Dialog</Button>
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
           <Typography variant="h4">Hi, Welcome back</Typography>
@@ -169,12 +159,6 @@ export default function MyDashboardApp() {
           </Grid>
         </Grid>
       </Container>
-      <AppDataDialog
-        open={open}
-        title="Edit Time Activity"
-        onClose={handleDialogClose}
-        data={TIME_ACTIVITIES}
-      />
     </Page>
   );
 }

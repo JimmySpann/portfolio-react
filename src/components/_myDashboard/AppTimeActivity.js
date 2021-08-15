@@ -1,5 +1,5 @@
 // material
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
@@ -18,64 +18,11 @@ import {
   MenuItem
 } from '@material-ui/core';
 import TimePicker from '@material-ui/lab/TimePicker';
+import MobileTimePicker from '@material-ui/lab/MobileTimePicker';
 import Scrollbar from '../Scrollbar';
 import UserMoreMenu from '../_dashboard/user/UserMoreMenu';
 import UserListHead from '../_dashboard/user/UserListHead';
-
-const columns = [
-  {
-    field: 'task',
-    headerName: 'Task',
-    width: 150,
-    editable: true
-  },
-  {
-    field: 'start',
-    headerName: 'Start',
-    width: 100,
-    type: 'dateTime',
-    editable: true
-  },
-  {
-    field: 'end',
-    headerName: 'end',
-    type: 'dateTime',
-    width: 100,
-    editable: true
-  },
-  {
-    field: 'duration',
-    headerName: 'Duration',
-    width: 100,
-    editable: false
-  },
-  {
-    field: 'quality',
-    headerName: 'Quality',
-    width: 100,
-    editable: true,
-    type: 'singleSelect'
-  },
-  {
-    field: 'menu',
-    headerName: 'Menu',
-    width: 40,
-    editable: false,
-    sortable: false
-  }
-];
-
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 }
-];
+import AppDataDialog from './AppDataDialog';
 // ----------------------------------------------------------------------
 const useStyles = makeStyles({
   timePicker: {
@@ -104,6 +51,14 @@ const TABLE_HEAD = [
 export default function AppTimeActivity({ activities }) {
   const classes = useStyles();
   const [activityList, setActivityList] = useState(activities);
+  const [open, setOpen] = useState(false);
+
+  const handleDialogOpen = () => {
+    setOpen(true);
+  };
+  const handleDialogClose = () => {
+    setOpen(false);
+  };
 
   const handleFieldChange = (e, idx = '', cusLabel = '') => {
     const updatedData = [...activityList];
@@ -137,6 +92,18 @@ export default function AppTimeActivity({ activities }) {
     updatedData[id]['duration'] = timeDistance(updatedData[id]['end'], updatedData[id]['start']);
     setActivityList(updatedData);
   };
+
+  const [dialogTitle, setDialogTitle] = useState('');
+  const [dialogData, setDialogData] = useState(activityList[0]);
+  const handleMenuClick = (type, id, data) => {
+    setDialogTitle(type);
+    setDialogData(data);
+  };
+
+  useEffect(() => {
+    setOpen(true);
+    console.log('data2', dialogData);
+  }, [dialogData]);
 
   return (
     <Card>
@@ -173,7 +140,7 @@ export default function AppTimeActivity({ activities }) {
                         }}
                       >
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                          <TimePicker
+                          <MobileTimePicker
                             renderInput={(props) => (
                               <TextField classes={{ root: classes.timePicker }} {...props} />
                             )}
@@ -192,7 +159,7 @@ export default function AppTimeActivity({ activities }) {
                         }}
                       >
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                          <TimePicker
+                          <MobileTimePicker
                             renderInput={(props) => (
                               <TextField classes={{ root: classes.timePicker }} {...props} />
                             )}
@@ -241,7 +208,7 @@ export default function AppTimeActivity({ activities }) {
                           root: classes.tableCell
                         }}
                       >
-                        <UserMoreMenu />
+                        <UserMoreMenu id={id} data={activity} handleItemClick={handleMenuClick} />
                       </TableCell>
                     </TableRow>
                   );
@@ -265,6 +232,12 @@ export default function AppTimeActivity({ activities }) {
           </Table>
         </TableContainer>
       </Box>
+      <AppDataDialog
+        open={open}
+        title={dialogTitle}
+        onClose={handleDialogClose}
+        data={dialogData}
+      />
     </Card>
   );
 }
