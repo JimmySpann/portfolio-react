@@ -87,29 +87,40 @@ export default function AppTimeActivity({ activities }) {
 
   const [dialogTitle, setDialogTitle] = useState('');
   const [dialogData, setDialogData] = useState(activityList[0]);
-  const handleMenuClick = (type, id, data) => {
-    setDialogTitle(type);
+  const handleMenuClick = (type, id = -1, data = {}) => {
+    if (type === 'add') setDialogTitle('Add New Activity');
+    else if (type === 'edit') setDialogTitle('Edit Activity');
+    else if (type === 'delete') {
+      setDialogTitle('Delete Current Activity?');
+    }
     const combinedData = {
       id,
+      type,
       data
     };
     setDialogData(combinedData);
+    setOpen(true);
   };
 
-  // const handleDialogOpen = () => {
-  //   setOpen(true);
-  // };
-  const handleDialogClose = (data, id) => {
-    const updatedData = [...activityList];
-    updatedData[id] = data;
-    setActivityList(updatedData);
+  const handleDialogClose = (data, id, type) => {
+    console.log('test333', data, id, type);
+    if (type === 'add') {
+      const newActivity = { ...data };
+      newActivity.id = activityList.length - 1;
+      setActivityList([...activityList, newActivity]);
+    } else if (type === 'edit') {
+      const updatedData = [...activityList];
+      updatedData[id] = data;
+      setActivityList(updatedData);
+    } else if (type === 'delete') {
+      if (data.deleteItem) {
+        const updatedData = [...activityList];
+        updatedData.splice(id, 1);
+        setActivityList(updatedData);
+      }
+    }
     setOpen(false);
   };
-
-  useEffect(() => {
-    setOpen(true);
-    console.log('data2', dialogData);
-  }, [dialogData]);
 
   return (
     <Card>

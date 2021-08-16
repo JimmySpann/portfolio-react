@@ -25,6 +25,9 @@ const useStyles = makeStyles({
   },
   button: {
     width: '100%'
+  },
+  hidden: {
+    display: 'none'
   }
 });
 
@@ -40,35 +43,51 @@ class FieldSchema {
 }
 
 const dataTypes = {
-  TimeTrackerEdit: [
-    new FieldSchema('task', 'task', 'textbox', [12, 12, 12], true),
-    new FieldSchema('start', 'start', 'timepicker', [12, 3, 3], false),
-    new FieldSchema('end', 'end', 'timepicker', [12, 3, 3], false),
-    new FieldSchema('duration', 'duration', 'label', [12, 3, 3], false),
-    new FieldSchema('quality', 'quality', 'selectbox', [12, 6, 6], false, [
-      'Amazing!',
-      'Great',
-      'Good',
-      'Meh',
-      'Bad',
-      'Terrible'
-    ])
-  ]
+  TimeTrackerEdit: {
+    fields: [
+      new FieldSchema('task', 'task', 'textbox', [12, 12, 12], true),
+      new FieldSchema('start', 'start', 'timepicker', [12, 3, 3], false),
+      new FieldSchema('end', 'end', 'timepicker', [12, 3, 3], false),
+      new FieldSchema('duration', 'duration', 'label', [12, 3, 3], false),
+      new FieldSchema('quality', 'quality', 'selectbox', [12, 6, 6], false, [
+        'Amazing!',
+        'Great',
+        'Good',
+        'Meh',
+        'Bad',
+        'Terrible'
+      ])
+    ],
+    showSaveCancel: true
+  },
+  YesNo: {
+    fields: [
+      new FieldSchema('No', 'No', 'button', [6, 6, 6], false),
+      new FieldSchema('Yes', 'Yes', 'button', [6, 6, 6], false)
+    ],
+    showSaveCancel: false
+  }
 };
 
 export default function AppDataDialog(props) {
   const classes = useStyles();
   const { title, data, onClose, open } = props;
   const [dataState, setDataState] = useState({ ...data.data });
-  const { id } = data;
+  const [dataSchema, setDataSchema] = useState({ fields: [] });
+  const { id, type } = data;
 
   // Needed to use Dialog for multiple rows
   useEffect(() => {
     setDataState({ ...data.data });
+    if (data.type === 'delete') {
+      setDataSchema(dataTypes.YesNo);
+    } else {
+      setDataSchema(dataTypes.TimeTrackerEdit);
+    }
   }, [data]);
 
   const handleClose = () => {
-    onClose(dataState, id);
+    onClose(dataState, id, type);
   };
 
   const generateField = (idx, field, handleFieldChange) => {
@@ -116,18 +135,26 @@ export default function AppDataDialog(props) {
       );
     } else if (type === 'selectbox') {
       element = (
-        <Select fullWidth={fullwidth} value={special[2]}>
+        <Select
+          fullWidth={fullwidth}
+          defaultValue={null}
+          value={dataState[label]}
+          onChange={(e) => {
+            handleFieldChange(e, label);
+          }}
+        >
           {special.map((item, id) => (
-            <MenuItem
-              key={id}
-              value={dataState[label]}
-              onChange={handleFieldChange}
-              inputprops={{ 'data-name': label }}
-            >
-              {item}
+            <MenuItem key={id} value={item.toString()} inputprops={{ 'data-name': label }}>
+              {item.toString()}
             </MenuItem>
           ))}
         </Select>
+      );
+    } else if (type === 'button') {
+      element = (
+        <Button classes={{ root: classes.button }} onClick={() => handleCustomButtonClick(label)}>
+          {label}
+        </Button>
       );
     }
 
@@ -144,13 +171,27 @@ export default function AppDataDialog(props) {
     );
   };
 
-  // const addCat = () => {
-  //   setCatState([...catState, { ...blankCat }]);
-  // };
+  const handleCustomButtonClick = (label) => {
+    if (label === 'Yes') {
+      onClose({ deleteItem: true }, id, type);
+    }
+    if (label === 'No') {
+      onClose({ deleteItem: false }, id, type);
+    }
+  };
 
-  const handleFieldChange = (e) => {
+  const handleFieldChange = (e, cusLabel = '') => {
     const updatedData = { ...dataState };
-    updatedData[e.target.dataset.name] = e.target.value;
+    let label = '';
+    console.log('test1', cusLabel);
+    if (e.target.dataset) {
+      label = e.target.dataset.name;
+    } else if (cusLabel !== '') {
+      console.log('test2');
+      label = cusLabel;
+    }
+    updatedData[label] = e.target.value;
+
     setDataState(updatedData);
   };
 
@@ -175,11 +216,16 @@ export default function AppDataDialog(props) {
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>{title}</DialogTitle>
       <Grid container spacing={3} classes={{ container: classes.container }}>
-        {dataTypes.TimeTrackerEdit.map((field, idx) =>
-          generateField(idx, field, handleFieldChange)
-        )}
-
-        <Grid item xs={12} md={12} lg={12} classes={{ root: classes.fieldContainer }}>
+        {dataSchema.fields.map((field, idx) => generateField(idx, field, handleFieldChange))}
+        <Grid
+          item
+          xs={12}
+          md={12}
+          lg={12}
+          classes={
+            dataSchema.showSaveCancel ? { root: classes.fieldContainer } : { root: classes.hidden }
+          }
+        >
           <Button classes={{ root: classes.button }}>Cancel</Button>
           <Button classes={{ root: classes.button }}>Save</Button>
         </Grid>
