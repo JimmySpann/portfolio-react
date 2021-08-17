@@ -1,6 +1,6 @@
-// material
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
+// material
 import { makeStyles } from '@material-ui/styles';
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
@@ -18,10 +18,13 @@ import {
   MenuItem
 } from '@material-ui/core';
 import MobileTimePicker from '@material-ui/lab/MobileTimePicker';
-import Scrollbar from '../Scrollbar';
-import UserMoreMenu from '../_dashboard/user/UserMoreMenu';
-import UserListHead from '../_dashboard/user/UserListHead';
-import AppDataDialog from './AppDataDialog';
+// components
+import Scrollbar from '../../Scrollbar';
+import TimeTableHead from './TimeTableHead';
+import TimeMoreMenu from './TimeMoreMenu';
+import AppDataDialog from '../AppDataDialog';
+// utils
+import { fToDuration } from '../../../utils/formatTime';
 // ----------------------------------------------------------------------
 const useStyles = makeStyles({
   timePicker: {
@@ -47,16 +50,24 @@ const TABLE_HEAD = [
   { id: 'menu', label: 'Menu', alignRight: false }
 ];
 
+AppTimeActivity.propTypes = {
+  children: PropTypes.any,
+  activities: PropTypes.object
+};
+
 export default function AppTimeActivity({ activities }) {
   const classes = useStyles();
   const [activityList, setActivityList] = useState(activities);
   const [open, setOpen] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState('');
+  const [dialogData, setDialogData] = useState(activityList[0]);
 
   const handleFieldChange = (e, idx = '', cusLabel = '') => {
     const updatedData = [...activityList];
     let id;
     let label;
     if (e.target.dataset) {
+      // Warning: Could cause issue if use dataset more in future (doubtful)
       [id, label] = e.target.dataset.name.split('-');
     } else if (idx !== '') {
       id = idx;
@@ -64,35 +75,19 @@ export default function AppTimeActivity({ activities }) {
     }
 
     updatedData[id][label] = e.target.value;
-
     setActivityList(updatedData);
   };
-
-  const timeDistance = (date1, date2) => {
-    let distance = Math.abs(date1 - date2);
-    const hours = Math.floor(distance / 3600000);
-    distance -= hours * 3600000;
-    const minutes = Math.floor(distance / 60000);
-    distance -= minutes * 60000;
-    const seconds = Math.floor(distance / 1000);
-    return `${hours}:${`0${minutes}`.slice(-2)}:${`0${seconds}`.slice(-2)}`;
-  };
-
   const handleDateChange = (date, label, id) => {
     const updatedData = [...activityList];
     updatedData[id][label] = date;
-    updatedData[id]['duration'] = timeDistance(updatedData[id]['end'], updatedData[id]['start']);
+    updatedData[id]['duration'] = fToDuration(updatedData[id]['end'], updatedData[id]['start']);
     setActivityList(updatedData);
   };
 
-  const [dialogTitle, setDialogTitle] = useState('');
-  const [dialogData, setDialogData] = useState(activityList[0]);
   const handleMenuClick = (type, id = -1, data = {}) => {
     if (type === 'add') setDialogTitle('Add New Activity');
     else if (type === 'edit') setDialogTitle('Edit Activity');
-    else if (type === 'delete') {
-      setDialogTitle('Delete Current Activity?');
-    }
+    else if (type === 'delete') setDialogTitle('Delete Current Activity?');
     const combinedData = {
       id,
       type,
@@ -101,9 +96,7 @@ export default function AppTimeActivity({ activities }) {
     setDialogData(combinedData);
     setOpen(true);
   };
-
   const handleDialogClose = (data, id, type) => {
-    console.log('test333', data, id, type);
     if (type === 'add') {
       const newActivity = { ...data };
       newActivity.id = activityList.length - 1;
@@ -129,7 +122,7 @@ export default function AppTimeActivity({ activities }) {
         <TableContainer sx={{ overFlowX: 'scroll' }}>
           <Table>
             <Scrollbar sx={{ height: 360, width: 630 }}>
-              <UserListHead headLabel={TABLE_HEAD} />
+              <TimeTableHead headLabel={TABLE_HEAD} />
               <TableBody>
                 {activityList.map((activity, id) => {
                   const { task, start, end, duration, quality } = activity;
@@ -225,27 +218,16 @@ export default function AppTimeActivity({ activities }) {
                           root: classes.tableCell
                         }}
                       >
-                        <UserMoreMenu id={id} data={activity} handleItemClick={handleMenuClick} />
+                        <TimeMoreMenu id={id} data={activity} handleItemClick={handleMenuClick} />
                       </TableCell>
                     </TableRow>
                   );
                 })}
-                {1 > 0 && (
-                  <TableRow style={{ height: '25px' }}>
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Scrollbar>
-            {false && (
-              <TableBody>
-                <TableRow>
-                  <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                    {/* <SearchNotFound searchQuery={filterName} /> */}
-                  </TableCell>
+                <TableRow style={{ height: '25px' }}>
+                  <TableCell colSpan={6} />
                 </TableRow>
               </TableBody>
-            )}
+            </Scrollbar>
           </Table>
         </TableContainer>
       </Box>
@@ -258,8 +240,3 @@ export default function AppTimeActivity({ activities }) {
     </Card>
   );
 }
-
-AppTimeActivity.propTypes = {
-  children: PropTypes.any,
-  activities: PropTypes.object
-};
