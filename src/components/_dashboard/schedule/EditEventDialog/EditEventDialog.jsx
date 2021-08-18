@@ -8,7 +8,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
-// import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers';
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
 import DateTimePicker from '@material-ui/lab/TimePicker';
 
@@ -122,25 +121,25 @@ EditEventDialog.propTypes = {
 
 export default EditEventDialog;
 
-function func(s, a, b) {
-  const matchEmpty = /^$/;
-  if (!s.match(matchEmpty)) {
-    let i = s.length - 1;
-    let aIndex = -1;
-    let bIndex = -1;
+// function func(s, a, b) {
+//   const matchEmpty = /^$/;
+//   if (!s.match(matchEmpty)) {
+//     let i = s.length - 1;
+//     let aIndex = -1;
+//     let bIndex = -1;
 
-    while (aIndex === -1 && bIndex === -1 && i >= 0) {
-      if (s.substring(i, i + 1) === a) aIndex = i;
-      if (s.substring(i, i + 1) === b) bIndex = i;
-      i--;
-    }
+//     while (aIndex === -1 && bIndex === -1 && i >= 0) {
+//       if (s.substring(i, i + 1) === a) aIndex = i;
+//       if (s.substring(i, i + 1) === b) bIndex = i;
+//       i--;
+//     }
 
-    if (aIndex !== -1) {
-      if (bIndex === -1) return aIndex;
-      return Math.max(aIndex, bIndex);
-    }
-    if (bIndex !== -1) return bIndex;
-    return -1;
-  }
-  return -1;
-}
+//     if (aIndex !== -1) {
+//       if (bIndex === -1) return aIndex;
+//       return Math.max(aIndex, bIndex);
+//     }
+//     if (bIndex !== -1) return bIndex;
+//     return -1;
+//   }
+//   return -1;
+// }

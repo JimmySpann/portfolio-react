@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Box, Grid, Container, Typography } from '@material-ui/core';
 // components
 import Page from '../components/Page';
-import { AppTasks } from '../components/_dashboard/app';
+import AppTasks from '../components/_myDashboard/AppTasks';
 import AppTimeActivity from '../components/_myDashboard/AppTimeActivity';
 import AppThoughtTracker from '../components/_myDashboard/AppThoughtTracker';
 import NoteModel from '../models/note';
@@ -110,7 +110,6 @@ const TIME_ACTIVITIES = [
 
 export default function MyDashboardApp() {
   useEffect(() => {
-    console.log('My Dashboard did mount');
     NoteModel.getAllNotes()
       .then((result) => {
         console.log(result);

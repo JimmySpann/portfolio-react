@@ -12,7 +12,7 @@ import {
   FormControlLabel,
   Stack
 } from '@material-ui/core';
-import Scrollbar from '../../Scrollbar';
+import Scrollbar from '../Scrollbar';
 // ----------------------------------------------------------------------
 
 const useStyles = makeStyles({

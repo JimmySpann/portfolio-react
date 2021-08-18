@@ -12,15 +12,9 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Checkbox,
-  TextField,
-  Select,
-  MenuItem,
-  autocompleteClasses
+  TextField
 } from '@material-ui/core';
-import TimePicker from '@material-ui/lab/TimePicker';
 import MobileTimePicker from '@material-ui/lab/MobileTimePicker';
-import Label from '../Label';
 import Scrollbar from '../Scrollbar';
 import USERLIST from '../../_mocks_/user';
 import { UserListHead } from '../_dashboard/user';
@@ -47,12 +41,9 @@ const TABLE_HEAD = [
 export default function AppThoughtTracker() {
   const classes = useStyles();
 
-  const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
-  const [filterName, setFilterName] = useState('');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -68,43 +59,6 @@ export default function AppThoughtTracker() {
     }
     setSelected([]);
   };
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-    setSelected(newSelected);
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleFilterByName = (event) => {
-    setFilterName(event.target.value);
-  };
-
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
-
-  // const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
-
-  // const isUserNotFound = filteredUsers.length === 0;
 
   return (
     <Card>
@@ -124,7 +78,7 @@ export default function AppThoughtTracker() {
               />
               <TableBody>
                 {USERLIST.map((row) => {
-                  const { id, name, role, status, company, isVerified } = row;
+                  const { id, name } = row;
                   const isItemSelected = USERLIST.indexOf(name) !== -1;
                   return (
                     <TableRow
