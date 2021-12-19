@@ -44,7 +44,6 @@ export default function LoginForm(props) {
           console.log(res);
           props.setCurrentUser(res.data.token);
           navigate('/dashboard', { replace: true });
-          // this.props.history.push('/notes');
         })
         .catch((err) => {
           // this.setState({errorMessage: err.response.data.message});

@@ -15,13 +15,13 @@ import Schedule from './pages/Schedule';
 
 // ----------------------------------------------------------------------
 
-export default function Router({ currentUser, setCurrentUser }) {
+export default function Router({ currentUser, setCurrentUser, logout }) {
   return useRoutes([
     {
       path: '/dashboard',
-      element: <DashboardLayout />,
+      element: currentUser ? <DashboardLayout logout={logout} /> : <Navigate to="/login" />,
       children: [
-        { path: '/', element: <Navigate to="/dashboard/app" replace /> },
+        { path: '', element: <Navigate to="/dashboard/app" replace /> },
         { path: 'app', element: <MyDashboardApp /> },
         { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
@@ -31,13 +31,13 @@ export default function Router({ currentUser, setCurrentUser }) {
       ]
     },
     {
-      path: '/',
+      path: '',
       element: <LogoOnlyLayout />,
       children: [
         { path: 'login', element: <Login setCurrentUser={setCurrentUser} /> },
         { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },
-        { path: '/', element: <Navigate to="/dashboard" /> },
+        { path: '', element: <Navigate to="/dashboard" /> },
         { path: '*', element: <Navigate to="/404" /> }
       ]
     },

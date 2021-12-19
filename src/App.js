@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 // eslint-disable-next-line camelcase
 import jwt_decode from 'jwt-decode';
 // routes
+import { useNavigate } from 'react-router-dom';
 import Router from './routes';
 // theme
 import ThemeConfig from './theme';
@@ -14,6 +15,7 @@ import setAuthHeader from './utils/setAuthHeader';
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -39,21 +41,21 @@ export default function App() {
     setCurrentUser(decodedToken.id);
   };
 
-  // const logout = () => {
-  //   // Remove Token
-  //   localStorage.removeItem('token');
-  //   // Remove Auth Header
-  //   setAuthHeader();
-  //   // Set State
-  //   setCurrentUser();
-  //   // Redirect
-  //   // props.history.push('/login');
-  // };
+  const logout = () => {
+    // Remove Token
+    localStorage.removeItem('token');
+    // Remove Auth Header
+    setAuthHeader();
+    // Set State
+    setCurrentUser();
+    // Redirect
+    navigate('/login');
+  };
 
   return (
     <ThemeConfig>
       <ScrollToTop />
-      <Router currentUser={currentUser} setCurrentUser={setToken} />
+      <Router currentUser={currentUser} setCurrentUser={setToken} logout={logout} />
     </ThemeConfig>
   );
 }

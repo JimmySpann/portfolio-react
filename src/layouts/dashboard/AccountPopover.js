@@ -34,7 +34,7 @@ const MENU_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function AccountPopover() {
+export default function AccountPopover({ logout }) {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
 
@@ -110,7 +110,14 @@ export default function AccountPopover() {
         ))}
 
         <Box sx={{ p: 2, pt: 1.5 }}>
-          <Button fullWidth color="inherit" variant="outlined">
+          <Button
+            fullWidth
+            color="inherit"
+            variant="outlined"
+            onClick={() => {
+              logout();
+            }}
+          >
             Logout
           </Button>
         </Box>
