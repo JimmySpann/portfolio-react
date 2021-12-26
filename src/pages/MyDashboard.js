@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 // material
 import { Box, Grid, Container, Typography } from '@material-ui/core';
 // components
@@ -7,6 +7,8 @@ import AppTasks from '../components/_myDashboard/AppTasks';
 import AppTimeActivity from '../components/_myDashboard/AppTimeActivity';
 import AppThoughtTracker from '../components/_myDashboard/AppThoughtTracker';
 import NoteModel from '../models/note';
+import ListModel from '../models/list';
+import TaskModel from '../models/task';
 
 // ----------------------------------------------------------------------
 
@@ -24,14 +26,14 @@ const GOALS = [
   'Write first cover letter'
 ];
 
-const HABITS = [
-  'Code',
-  'Linkedin Post',
-  'Visualization',
-  'Networking',
-  'Character Dev',
-  'Read Mission'
-];
+// const HABITS = [
+//   'Code',
+//   'Linkedin Post',
+//   'Visualization',
+//   'Networking',
+//   'Character Dev',
+//   'Read Mission'
+// ];
 
 const TIME_ACTIVITIES = [
   {
@@ -109,13 +111,37 @@ const TIME_ACTIVITIES = [
 ];
 
 export default function MyDashboardApp() {
+  const [habits, setHabits] = useState({ tasks: [{ name: 'test' }] });
+
   useEffect(() => {
-    NoteModel.getAllNotes()
+    ListModel.getListById('61c8c3dfcc6f504de0a35e56')
       .then((result) => {
-        console.log(result);
+        setHabits(result);
+        console.log('result', result);
       })
-      .catch((err) => console.log(err));
+      .catch((error) => console.log('You messed up, dumbass', error));
   }, []);
+
+  useEffect(() => {
+    // NoteModel.getAllNotes()
+    //   .then((result) => {
+    //     console.log(result);
+    //   })
+    //   .catch((err) => console.log(err));
+    // TaskModel.createTask({
+    //   name: 'Code',
+    //   list: '61c8c3dfcc6f504de0a35e56',
+    // })
+    // .then((result) => console.log('Congrats!', result))
+    // .catch((error) => console.log('You messed up, dumbass', error));
+    // ListModel.getListById('61c8c3dfcc6f504de0a35e56')
+    //   .then((result) => {
+    //     setHabits(result);
+    //     console.log(habits);
+    //   })
+    //   .catch((error) => console.log('You messed up, dumbass', error));
+    console.log('habits', habits);
+  }, [habits]);
 
   return (
     <Page title="Dashboard | Sage-Space">
@@ -133,7 +159,7 @@ export default function MyDashboardApp() {
           </Grid>
 
           <Grid item xs={12} md={6} lg={2}>
-            <AppTasks tasks={HABITS} title="Habits" />
+            <AppTasks tasks={habits.tasks} title={habits.name} />
           </Grid>
 
           <Grid item xs={12} md={7} lg={7}>

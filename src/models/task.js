@@ -1,4 +1,4 @@
-const url = `${process.env.REACT_APP_API}/tasks`
+const url = `${process.env.REACT_APP_API}/tasks`;
 const token = localStorage.getItem('token');
 
 class TaskModel {
@@ -29,7 +29,6 @@ class TaskModel {
     })
       .then((response) => response.json())
   }
-  
 }
 
 

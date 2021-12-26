@@ -34,7 +34,7 @@ function TaskItem({ task, checked, formik, ...other }) {
     <Stack direction="row" justifyContent="space-between" sx={{ py: 0.75 }}>
       <FormControlLabel
         control={
-          <Checkbox {...getFieldProps('checked')} value={task} checked={checked} {...other} />
+          <Checkbox {...getFieldProps('checked')} value={task.name} checked={checked} {...other} />
         }
         label={
           <Typography
@@ -46,7 +46,7 @@ function TaskItem({ task, checked, formik, ...other }) {
               })
             }}
           >
-            {task}
+            {task.name}
           </Typography>
         }
       />
@@ -56,20 +56,19 @@ function TaskItem({ task, checked, formik, ...other }) {
 
 AppTasks.propTypes = {
   tasks: PropTypes.array,
-  title: PropTypes.string
+  name: PropTypes.string
 };
 
 export default function AppTasks({ tasks, title }) {
   const classes = useStyles();
   const formik = useFormik({
-    initialValues: {
-      checked: [tasks[2]]
-    },
+    // initialValues: {
+    //   checked: [tasks[2]]
+    // },
     onSubmit: (values) => {
       console.log(values);
     }
   });
-
   const { values, handleSubmit } = formik;
 
   return (
@@ -81,10 +80,10 @@ export default function AppTasks({ tasks, title }) {
             <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
               {tasks.map((task) => (
                 <TaskItem
-                  key={task}
+                  key={task._id}
                   task={task}
                   formik={formik}
-                  checked={values.checked.includes(task)}
+                  // checked={values.checked.includes(task)}
                 />
               ))}
             </Form>
